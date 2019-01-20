@@ -26,6 +26,7 @@ jobs:
             - wait-go-linux
             - wait-go-darwin
             - wait-go-windows
+            - wait-go
   release:
     docker:
       # specify the version
