@@ -75,7 +75,6 @@ CMD ["php-fpm"]
 ```
 ### docker-compose.yml
 ```
-
 version: '3.3'
 services:
   db:
