@@ -41,14 +41,17 @@ jobs:
       - checkout
       # specify any bash command here prefixed with `run: `
       - run: go build
+      - run: ls -al
+      - run: VERSION=$(wait-go --version)
+      - run: echo $VERSION
 workflows:
   version: 2
-  build_and_test:
+  test_and_build:
     jobs:
-      - build
-      - test:
+      - test
+      - build:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: master
