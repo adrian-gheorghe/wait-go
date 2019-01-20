@@ -36,7 +36,7 @@ jobs:
       - run:
           command: |
             ls -al ./artefacts
-            chmod +x ./artefacts/wait-go-linux
+            chmod 777 ./artefacts/wait-go-linux
             cd artefacts
             VERSION=$(./wait-go-linux --version)
             echo $VERSION
