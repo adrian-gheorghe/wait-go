@@ -4,23 +4,19 @@ import (
 	"testing"
 )
 
-func TestExecutution(t *testing.T) {
-	if 2 != 2 {
-		t.Error("Expected 2 != 4")
-	}
+func TestChooseShell(t *testing.T) {
+
 	cases := []struct {
-		Name           string
-		A, B, Expected int
+		Name     string
+		Expected string
 	}{
-		{"Test fist item", 1, 1, 2},
-		{"Test second item", 2, 4, 6},
-		{"Another one", 2, 8, 10},
+		{"Test bash", "bash"},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.Name, func(t *testing.T) {
-			actual := tc.A + tc.B
-			if actual != tc.A+tc.B {
+			actual := tc.Expected
+			if actual != chooseShell() {
 				t.Fatal("failure")
 			}
 		})
