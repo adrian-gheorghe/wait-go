@@ -43,7 +43,7 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: ./artefacts
+          at: .
       - run:
           command: |
             ls -al artefacts
