@@ -43,7 +43,7 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-        at: ./artefacts
+          at: ./artefacts
       - run:
           command: |
             VERSION=$(./wait-go-linux --version)
@@ -51,7 +51,7 @@ jobs:
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 workflows:
   version: 2
-  test_and_build:
+  test_and_build_and_release:
     jobs:
       - test
       - build:
