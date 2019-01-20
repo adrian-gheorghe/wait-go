@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const appVersion = "0.1.0"
+
 type arrayFlags []string
 
 func (i *arrayFlags) String() string {
@@ -102,7 +104,13 @@ func main() {
 	flag.Var(&commandFlags, "command", "Command that should be run when all waits are accessible. Multiple commands can be added.")
 	timeoutFlag := flag.Int("timeout", 600, "Timeout untill script is killed.")
 	intervalFlag := flag.Int("interval", 15, "Interval between calls")
+	version := flag.Bool("version", false, "Prints current version")
 	flag.Parse()
+
+	if *version {
+		fmt.Println(appVersion)
+		os.Exit(0)
+	}
 
 	if len(waitsFlags) == 0 || len(commandFlags) == 0 {
 		flag.PrintDefaults()

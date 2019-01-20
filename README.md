@@ -17,6 +17,8 @@ wait-go --help
     	Interval between calls (default 15)
   -timeout int
     	Timeout untill script is killed. (default 600)
+  -version
+    Prints current version
   -wait value
     	You can specify the HOST and TCP PORT using the format HOST:PORT, or you can specify a command that should return an output. Multiple wait flags can be added.
 ```
@@ -73,7 +75,6 @@ CMD ["php-fpm"]
 ```
 ### docker-compose.yml
 ```
-
 version: '3.3'
 services:
   db:
