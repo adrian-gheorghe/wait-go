@@ -42,7 +42,7 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run:
           command: |
-            go build
+            go build -o ./wait-go
             ls -al
             VERSION=$(wait-go --version)
             echo $VERSION
