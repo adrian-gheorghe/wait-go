@@ -15,6 +15,7 @@ jobs:
       - run:
           command: |
             mkdir -p ../artefacts
+            cp version.txt /artefacts/version.txt
             GOOS=linux go build -o ./artefacts/wait-go-linux
             GOOS=darwin go build -o ./artefacts/wait-go-darwin
             GOOS=windows go build -o ./artefacts/wait-go-windows
@@ -27,6 +28,7 @@ jobs:
             - wait-go-darwin
             - wait-go-windows
             - wait-go
+            - version.txt
   release:
     docker:
       # specify the version
@@ -38,8 +40,7 @@ jobs:
       - run:
           command: |
             ls -al ./artefacts
-            chmod +x ./artefacts/wait-go
-            VERSION=$(./artefacts/wait-go --version)
+            VERSION=$(cat ./artefacts/version.txt)
             echo $VERSION
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
 workflows:
