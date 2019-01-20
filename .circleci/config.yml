@@ -37,13 +37,15 @@ jobs:
             GOOS=darwin go build -o ./artefacts/wait-go-darwin
             GOOS=windows go build -o ./artefacts/wait-go-windows
             ls -al ./artefacts
+      - persist_to_workspace:
+          root: ~/artefacts
+          paths:
+            - artefacts
   release:
     docker:
       # specify the version
       - image: cibuilds/github:0.10
     steps:
-      - attach_workspace:
-          at: .
       - run:
           command: |
             ls -al artefacts
