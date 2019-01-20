@@ -1,35 +1,18 @@
-# Golang CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
+   
 jobs:
   test:
+    working_directory: /tmp
     docker:
-      # specify the version
       - image: circleci/golang:1.11
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
     steps:
       - checkout
-
-      # specify any bash command here prefixed with `run: `
-      - run: go test -v ./...
-  
+      - run: go test -v ./...  
   build:
     docker:
-      # specify the version
       - image: circleci/golang:1.11
     steps:
       - checkout
-      # specify any bash command here prefixed with `run: `
       - run:
           command: |
             mkdir -p artefacts
@@ -38,20 +21,25 @@ jobs:
             GOOS=windows go build -o ./artefacts/wait-go-windows
             ls -al ./artefacts
       - persist_to_workspace:
-          root: ./artefacts
+          root: artefacts
           paths:
-            - artefacts
+            - wait-go-linux
+            - wait-go-darwin
+            - wait-go-windows
   release:
     docker:
       # specify the version
       - image: cibuilds/github:0.10
     steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/artefacts
       - run:
           command: |
-            ls -al artefacts
+            ls -al /tmp/artefacts
             VERSION=$(./artefacts/wait-go-linux --version)
             echo $VERSION
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /tmp/artefacts/
 workflows:
   version: 2
   test_and_build_and_release:
