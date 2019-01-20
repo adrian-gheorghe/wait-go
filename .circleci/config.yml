@@ -42,10 +42,14 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run:
           command: |
-            go build -o ./wait-go
+            mkdir -p artefacts
+            GOOS=linux go build -o ./artefacts/wait-go-linux
+            GOOS=darwin go build -o ./artefacts/wait-go-darwin
+            GOOS=windows go build -o ./artefacts/wait-go-windows
             ls -al
             VERSION=$(wait-go --version)
             echo $VERSION
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
 workflows:
   version: 2
   test_and_build:
