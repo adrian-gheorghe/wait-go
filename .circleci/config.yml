@@ -18,6 +18,7 @@ jobs:
             GOOS=linux go build -o ./artefacts/wait-go-linux
             GOOS=darwin go build -o ./artefacts/wait-go-darwin
             GOOS=windows go build -o ./artefacts/wait-go-windows
+            go build -o ./artefacts/wait-go
             ls -al ./artefacts
       - persist_to_workspace:
           root: artefacts
@@ -36,11 +37,9 @@ jobs:
       - run:
           command: |
             ls -al ./artefacts
-            chmod 777 ./artefacts/wait-go-linux
-            cd artefacts
-            VERSION=$(./wait-go-linux --version)
+            chmod +x ./artefacts/wait-go
+            VERSION=$(./artefacts/wait-go --version)
             echo $VERSION
-            cd ..
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
 workflows:
   version: 2
