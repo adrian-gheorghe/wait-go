@@ -46,9 +46,11 @@ jobs:
           at: ./artefacts
       - run:
           command: |
+            cd artefacts
             VERSION=$(./wait-go-linux --version)
             echo $VERSION
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+            cd ..
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
 workflows:
   version: 2
   test_and_build_and_release:
