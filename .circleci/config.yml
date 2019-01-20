@@ -46,10 +46,11 @@ jobs:
             GOOS=linux go build -o ./artefacts/wait-go-linux
             GOOS=darwin go build -o ./artefacts/wait-go-darwin
             GOOS=windows go build -o ./artefacts/wait-go-windows
+            go build -o ./wait-go
             ls -al
             VERSION=$(wait-go --version)
             echo $VERSION
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 workflows:
   version: 2
   test_and_build:
