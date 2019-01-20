@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           command: |
-            mkdir -p ../artefacts
+            mkdir -p ./artefacts
             cp version.txt ./artefacts/version.txt
             GOOS=linux go build -o ./artefacts/wait-go-linux
             GOOS=darwin go build -o ./artefacts/wait-go-darwin
