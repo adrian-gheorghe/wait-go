@@ -1,5 +1,7 @@
 ## wait-go
 
+[![CircleCI](https://circleci.com/gh/adrian-gheorghe/wait-go.svg?style=svg)](https://circleci.com/gh/adrian-gheorghe/wait-go)
+
 `wait-go` is the golang rewrite of https://github.com/adrian-gheorghe/wait
 The script waits for a host or multiple hosts to respond on a TCP port but can also wait for a command to output a value. For example you can wait for a file to exist or contain something.
 
