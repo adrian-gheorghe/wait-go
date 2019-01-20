@@ -2,7 +2,6 @@ version: 2
    
 jobs:
   test:
-    working_directory: /tmp/workspace
     docker:
       - image: circleci/golang:1.11
     steps:
@@ -15,11 +14,11 @@ jobs:
       - checkout
       - run:
           command: |
-            mkdir -p /tmp/workspace/artefacts
-            GOOS=linux go build -o /tmp/workspace/artefacts/wait-go-linux
-            GOOS=darwin go build -o /tmp/workspace/artefacts/wait-go-darwin
-            GOOS=windows go build -o /tmp/workspace/artefacts/wait-go-windows
-            ls -al /tmp/workspace/artefacts
+            mkdir -p ../artefacts
+            GOOS=linux go build -o ./artefacts/wait-go-linux
+            GOOS=darwin go build -o ./artefacts/wait-go-darwin
+            GOOS=windows go build -o ./artefacts/wait-go-windows
+            ls -al ./artefacts
       - persist_to_workspace:
           root: artefacts
           paths:
@@ -33,13 +32,13 @@ jobs:
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace/artefacts
+          at: ./artefacts
       - run:
           command: |
-            ls -al /tmp/workspace/artefacts
-            VERSION=$(/tmp/workspace/artefacts/wait-go-linux --version)
+            ls -al ./artefacts
+            VERSION=$(./artefacts/wait-go-linux --version)
             echo $VERSION
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /tmp/workspace/artefacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
 workflows:
   version: 2
   test_and_build_and_release:
