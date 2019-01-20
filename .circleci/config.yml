@@ -36,6 +36,7 @@ jobs:
       - run:
           command: |
             ls -al ./artefacts
+            chmod +x ./artefacts/wait-go-linux
             VERSION=$(./artefacts/wait-go-linux --version)
             echo $VERSION
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artefacts/
