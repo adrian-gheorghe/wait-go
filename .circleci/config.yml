@@ -38,7 +38,7 @@ jobs:
             GOOS=windows go build -o ./artefacts/wait-go-windows
             ls -al ./artefacts
       - persist_to_workspace:
-          root: ~/artefacts
+          root: ./artefacts
           paths:
             - artefacts
   release:
