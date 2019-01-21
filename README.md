@@ -90,6 +90,6 @@ services:
   install:
       build:
         context: .
-      command: "wait-go --wait 'db:3306' --wait 'ls -al /var/www/html/ | grep composer.json' --command 'cd /var/www/html' --command 'ls -al' --command 'composer install' --command 'php /var/www/html/bin/console doctrine:migrations:migrate -n -vvv'"
+      command: "/app/wait-go --wait 'db:3306' --wait 'ls -al /var/www/html/ | grep composer.json' --command 'cd /var/www/html' --command 'ls -al' --command 'composer install' --command 'php /var/www/html/bin/console doctrine:migrations:migrate -n -vvv'"
 
 ```
