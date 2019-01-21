@@ -9,6 +9,4 @@ services:
   wait:
     build:
       context: .
-      args:
-        RELEASE_VERSION: 0.1.1
     command: "wait-go --wait \"db:3306\" --command \"ls -al\""
