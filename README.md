@@ -7,6 +7,10 @@ The script waits for a host or multiple hosts to respond on a TCP port but can a
 
 The script is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
 
+## Download
+
+Download latest from the releases page: https://github.com/adrian-gheorghe/wait-go/releases
+
 ## Usage
 
 ```
