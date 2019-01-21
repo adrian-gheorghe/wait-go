@@ -16,10 +16,10 @@ jobs:
           command: |
             mkdir -p ./artefacts
             cp version.txt ./artefacts/version.txt
-            GOOS=linux go build -o ./artefacts/wait-go-linux
-            GOOS=darwin go build -o ./artefacts/wait-go-darwin
-            GOOS=windows go build -o ./artefacts/wait-go-windows
-            go build -o ./artefacts/wait-go
+            CGO_ENABLED=0 GOOS=linux go build -o ./artefacts/wait-go-linux
+            CGO_ENABLED=0 GOOS=darwin go build -o ./artefacts/wait-go-darwin
+            CGO_ENABLED=0 GOOS=windows go build -o ./artefacts/wait-go-windows
+            CGO_ENABLED=0 go build -o ./artefacts/wait-go
             ls -al ./artefacts
       - persist_to_workspace:
           root: artefacts
