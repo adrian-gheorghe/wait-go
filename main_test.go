@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"log"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -71,6 +72,34 @@ func TestVersion(t *testing.T) {
 	log.SetOutput(os.Stderr)
 
 	if outEmptyCommand != 1 {
+		t.Fatal("Failure")
+	}
+}
+
+func TestMainExecution(t *testing.T) {
+	var pathDetector = localPathDetector{}
+	// Set custom logger
+	log.SetFlags(0)
+	log.SetOutput(new(logWriter))
+
+	var testWaitsFlags arrayFlags
+	testWaitsFlags.Set("ls -al ./testdata | grep VERSION")
+	var testCommandFlags arrayFlags
+	testCommandFlags.Set("echo TESTWAIT")
+	var testTimeoutFlag = 10
+	var testIntervalFlag = 5
+	var testVersion = false
+
+	var bufOut bytes.Buffer
+	log.SetOutput(&bufOut)
+	outCommand := mainExecution(testWaitsFlags, testCommandFlags, testTimeoutFlag, testIntervalFlag, testVersion, pathDetector)
+	log.SetOutput(os.Stderr)
+
+	if !strings.Contains(bufOut.String(), "VERSION") || !strings.Contains(bufOut.String(), "TESTWAIT") {
+		t.Fatal("Failure")
+	}
+
+	if outCommand != 2 {
 		t.Fatal("Failure")
 	}
 }
