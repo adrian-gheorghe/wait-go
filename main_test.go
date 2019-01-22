@@ -20,7 +20,7 @@ func (pathDetector testPathDetector) inPath(command string) bool {
 }
 
 func readVersion() string {
-	dat, _ := ioutil.ReadFile("./version.txt")
+	dat, _ := ioutil.ReadFile("./VERSION")
 	return string(dat)
 }
 
