@@ -10,7 +10,22 @@ import (
 	"time"
 )
 
-const appVersion = "0.2.0"
+const appVersion = "0.2.1"
+
+// PathDetector detects if binaries are in path
+type PathDetector interface {
+	inPath(command string) bool
+}
+type localPathDetector struct {
+}
+
+func (pathDetector localPathDetector) inPath(command string) bool {
+	_, err := exec.LookPath(command)
+	if err != nil {
+		return false
+	}
+	return true
+}
 
 type arrayFlags []string
 
@@ -78,25 +93,33 @@ func processCommandExec(command string, timeoutFlag int, intervalFlag int, shell
 	}
 }
 
-func inPath(command string) bool {
-	_, err := exec.LookPath(command)
-	if err != nil {
-		return false
-	}
-	return true
-}
-
-func chooseShell() string {
-	if inPath("bash") {
+func chooseShell(pathDetector PathDetector) string {
+	if pathDetector.inPath("bash") {
 		return "bash"
-	} else if inPath("sh") {
+	} else if pathDetector.inPath("sh") {
 		return "sh"
 	} else {
 		panic("Neither bash or sh present on system")
 	}
 }
 
+func mainExecution(waitsFlags arrayFlags, commandFlags arrayFlags, timeoutFlag int, intervalFlag int, version bool, pathDetector localPathDetector) int {
+	if version {
+		fmt.Println(appVersion)
+		return 0
+	}
+
+	if len(waitsFlags) == 0 || len(commandFlags) == 0 {
+		flag.PrintDefaults()
+		return 1
+	}
+	shell := chooseShell(pathDetector)
+	waitFor(waitsFlags, commandFlags, timeoutFlag, intervalFlag, shell)
+	return 2
+}
+
 func main() {
+	var pathDetector = localPathDetector{}
 	var waitsFlags arrayFlags
 	var commandFlags arrayFlags
 
@@ -106,17 +129,6 @@ func main() {
 	intervalFlag := flag.Int("interval", 15, "Interval between calls")
 	version := flag.Bool("version", false, "Prints current version")
 	flag.Parse()
-
-	if *version {
-		fmt.Println(appVersion)
-		os.Exit(0)
-	}
-
-	if len(waitsFlags) == 0 || len(commandFlags) == 0 {
-		flag.PrintDefaults()
-		os.Exit(1)
-	}
-
-	shell := chooseShell()
-	waitFor(waitsFlags, commandFlags, *timeoutFlag, *intervalFlag, shell)
+	returnValue := mainExecution(waitsFlags, commandFlags, *timeoutFlag, *intervalFlag, *version, pathDetector)
+	os.Exit(returnValue)
 }
