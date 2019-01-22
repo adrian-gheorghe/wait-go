@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
 	"os"
 	"testing"
@@ -17,11 +16,6 @@ func (pathDetector testPathDetector) inPath(command string) bool {
 		return true
 	}
 	return false
-}
-
-func readVersion() string {
-	dat, _ := ioutil.ReadFile("./VERSION")
-	return string(dat)
 }
 
 func TestChooseShell(t *testing.T) {
@@ -47,13 +41,18 @@ func TestChooseShell(t *testing.T) {
 	}
 }
 
-func TestMainExecution(t *testing.T) {
+func TestVersion(t *testing.T) {
 	var pathDetector = localPathDetector{}
+	// Set custom logger
+	log.SetFlags(0)
+	log.SetOutput(new(logWriter))
+
 	var testWaitsFlags arrayFlags
 	var testCommandFlags arrayFlags
 	var testTimeoutFlag = 10
 	var testIntervalFlag = 5
 	var testVersion = true
+	appVersionFile = "./testdata/VERSION"
 
 	var buf bytes.Buffer
 	log.SetOutput(&buf)
@@ -61,5 +60,17 @@ func TestMainExecution(t *testing.T) {
 	log.SetOutput(os.Stderr)
 	out := buf.String()
 
-	t.Fatal("aaa" + out)
+	if out != "1.1.0\n" {
+		t.Fatal("Failure")
+	}
+
+	testVersion = false
+	var bufOutEmptyCommand bytes.Buffer
+	log.SetOutput(&bufOutEmptyCommand)
+	outEmptyCommand := mainExecution(testWaitsFlags, testCommandFlags, testTimeoutFlag, testIntervalFlag, testVersion, pathDetector)
+	log.SetOutput(os.Stderr)
+
+	if outEmptyCommand != 1 {
+		t.Fatal("Failure")
+	}
 }
